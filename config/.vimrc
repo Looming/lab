@@ -41,6 +41,7 @@ set listchars=tab:>-,trail:_
 set list
 set encoding=utf-8
 set scrolloff=5
+set cursorline
 :colors darkblue
 
 "===============
@@ -55,5 +56,6 @@ function! CurrectDir()
     return curdir
 endfunction
 
+syntax on
 syntax match Trail " +$"
 highlight def link Trail Todo
