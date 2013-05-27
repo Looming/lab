@@ -31,7 +31,6 @@ sub mock{
 }
 
 
-=a
 sub install_schema{
 }
 

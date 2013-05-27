@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More;
 
 my $engineer1 = {
     name  => 'jack',
@@ -26,5 +26,7 @@ is( $engineer->age, $engineer1->{age}, 'age() should return ' . $engineer1->{age
 
 like( $engineer->des, qr/^jack.*perl$/ );
 
-is( $engineer->age, $engineer2->{age}, 'age() should return ' . $engineer1->{age} );
+isnt( $engineer->age, $engineer2->{age}, 'age() should return ' . $engineer1->{age} );
 
+
+done_testing;

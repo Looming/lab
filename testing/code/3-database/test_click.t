@@ -14,7 +14,7 @@ set_fixed_time('12/11/2011', '%m/%d/%Y');
 
 my $config = ConfigLoader->load();
 use Data::Dumper;
-#print Dumper $config;
+print Dumper $config;
 
 my $expect = {
     user_id => 11,

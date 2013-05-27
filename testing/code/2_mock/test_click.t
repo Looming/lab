@@ -11,7 +11,6 @@ my $expect = {
     ip      => '222.73.96.250',
     date    => '2011-12-11',
 };
-
 is_deeply( TodayClick::get_today_click(), $expect);
 
 {
@@ -21,5 +20,4 @@ is_deeply( TodayClick::get_today_click(), $expect);
 }
 
 is_deeply( TodayClick::get_today_click(), $expect);
-
 done_testing;
