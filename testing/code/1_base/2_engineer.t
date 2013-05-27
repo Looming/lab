@@ -4,26 +4,27 @@ use strict;
 use warnings;
 use Test::More tests => 5;
 
-my $test_engineer = {
+my $engineer1 = {
     name  => 'jack',
     age   => 24,
     skill => 'perl'
 };
 
-my $wrong_engineer = {
+my $engineer2 = {
     name  => 'zz',
     age   => 20,
-    skill => 'perl'
+    skill => 'java'
 };
 
 use_ok('Engineer') or exit;
 
-my $engineer = Engineer->new( $test_engineer );
+my $engineer = Engineer->new( $engineer1 );
 
 isa_ok( $engineer, 'Engineer' );
 
-is( $engineer->age, $test_engineer->{age}, 'age() should return ' . $test_engineer->{age} );
+is( $engineer->age, $engineer1->{age}, 'age() should return ' . $engineer1->{age} );
 
 like( $engineer->des, qr/^jack.*perl$/ );
 
-is( $engineer->age, $wrong_engineer->{age}, 'age() should return ' . $test_engineer->{age} );
+is( $engineer->age, $engineer2->{age}, 'age() should return ' . $engineer1->{age} );
+
