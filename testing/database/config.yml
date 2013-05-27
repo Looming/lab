@@ -1,0 +1,118 @@
+name: AppDriver
+default_model: Master
+default_view: TT
+default_data: __HOME__/tmp
+default_log: __HOME__/log
+log_server: 
+  ip: 127.0.0.1
+  port: 514
+master:
+  host:     114.80.119.116
+  port:     3306
+  database: tachyon
+  usr:      tachyon
+  passwd:   tachyon
+Model::Slave: 
+  schema_class: Tachyon::Schema
+  connect_info:
+    - dbi:mysql:mysql_read_default_file=__HOME__/etc/my.cnf;mysql_read_default_group=slave
+    - ''
+    - ''
+    - AutoCommit: 1
+      PrintError: 1
+      mysql_enable_utf8: 1
+View::JSON:
+  expose_stash: data
+  json_driver: JSON::XS
+View::Download:
+  stash_key: csv 
+  quote_char: \"
+  escape_char: \"
+  sep_char: ","
+  eol: "\n"
+View::TT:
+  INCLUDE_PATH:
+    - __HOME__/template
+    - __HOME__/root/static/m
+  TEMPLATE_EXTENSION: .tt
+  ENCODING: utf-8
+Controller::HTML::FormFu:
+  constructor:
+    config_file_path: __HOME__/template
+    languages:
+      - zh
+  model_stash:
+    schema: Master
+Plugin::Authentication:
+  default_realm: partner
+  realms:
+    partner:
+      credential:
+        class: Password
+        password_field: password
+        password_type: hashed
+        password_hash_type: MD5
+      store:
+        class: DBIx::Class
+        user_model: Master::Partner
+        role_relation: roles
+        role_field: role
+    manager:
+      credential:
+        class: Password
+        password_field: password
+        password_type: hashed
+        password_hash_type: MD5
+      store:
+        class: DBIx::Class
+        user_model: Master::Manager
+        role_relation: roles
+        role_field: role
+Plugin::Session:
+  expires: 3600
+  cookie_name: appdriver_session
+  cookie_path: /
+  dbi_dbh: Master
+  dbi_table: session
+static:
+  dirs:
+    - static
+Mail::Mailer:
+  smtp: 192.168.2.69
+  to: service@appdriver.cn
+  from: appdriver_inquiry@appdriver.cn
+  subject: "【测试】联系"
+  partner:
+    to: service@appdriver.cn
+    from: appdriver_inquiry@appdriver.cn
+    subject: "【测试】联系"
+  user:
+    to: service@appdriver.cn
+    subject: "【[% site.name %]】联系@dev"
+Geo::IP:
+  GeoLiteCity:
+    data: __HOME__/var/lib/GeoIP/GeoLiteCity.dat
+    source: http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+  GeoIPISP:
+    data: __HOME__/var/lib/GeoIP/GeoIPISP.dat
+Service::Internal:
+  host: ''
+Service::GreeReward:
+  host: '' 
+  achieve: '' 
+Plugin::Cache: 
+  backend: 
+    class: "Cache::Memcached" 
+    servers:  
+      - 127.0.0.1:11211 
+    debug: 2 
+Service::Internal:
+    host: 'sandbox.appdriver.cn'
+OpenID::Consumer:
+    identifier_base: 'http://www.appdriver.cn/partner/'
+    trust_root: 'http://sandbox.appdriver.cn/'
+OpenID::Server: 
+    login_base: 'http://sandbox.appdriver.cn/s/authorization/openid/consumer/login/' 
+    op_endpoint_url: 'http://www.appdriver.cn/s/authorization/openid/server'
+    op_trust_url: 'http://www.appdriver.cn/s/authorization/openid/server/trust'
+    op_setup_url: 'http://www.appdriver.cn/a/partner/openid_login'
